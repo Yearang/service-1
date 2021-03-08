@@ -4,10 +4,10 @@ LABEL maintainer="koyr"
 
 VOLUME /tmp
 
-EXPOSE 8084
+EXPOSE 8004
 
-ARG JAR_FILE=target/Service-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=target/service-0.0.1-SNAPSHOT.jar
 
-ADD ${JAR_FILE} Service.jar
+ADD ${JAR_FILE} service.jar
 
-ENTRYPOINT ["java", "-jar", "Service.jar"]
+ENTRYPOINT ["java", "-jar", "service.jar"]
