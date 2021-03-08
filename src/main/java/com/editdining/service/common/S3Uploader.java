@@ -23,7 +23,7 @@ import java.time.LocalDate;
 //@Service
 public class S3Uploader{
 
-    private final static String TEMP_FILE_PATH = "src/main/resources/";
+    private final static String TEMP_FILE_PATH = "/tmp";
 
     @Autowired
     private final AmazonS3 amazonS3Client;
