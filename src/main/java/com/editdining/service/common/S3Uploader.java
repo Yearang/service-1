@@ -23,7 +23,7 @@ import java.time.LocalDate;
 //@Service
 public class S3Uploader{
 
-    private final static String TEMP_FILE_PATH = "/tmp";
+    private final static String TEMP_FILE_PATH = "/tmp/";
 
     @Autowired
     private final AmazonS3 amazonS3Client;
@@ -32,9 +32,9 @@ public class S3Uploader{
     public String bucket;             // 저는 .properties가 아닌 .yml을 이용하였습니다!
 
     public String upload(MultipartFile multipartFile) throws IOException {
-        System.out.println(multipartFile);
+//        System.out.println(multipartFile);
         File convertedFile = convert(multipartFile);
-        System.out.println(convertedFile);
+//        System.out.println(convertedFile);
         return upload(convertedFile);
     }
 
