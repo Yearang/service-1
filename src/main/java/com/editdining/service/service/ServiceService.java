@@ -8,13 +8,10 @@ import com.editdining.service.dto.Media;
 import com.editdining.service.dto.Price;
 import com.editdining.service.dto.ServiceDto;
 
+import com.editdining.service.entity.ScrapEntity;
 import com.editdining.service.entity.ServiceMediaEntity;
 import com.editdining.service.entity.ServicePriceEntity;
-import com.editdining.service.repository.ServiceMasterRepositorySupport;
-import com.editdining.service.repository.ServiceMediaRepository;
-import com.editdining.service.repository.ServiceMasterRepository;
-import com.editdining.service.repository.ServicePriceRepository;
-import com.netflix.discovery.converters.Auto;
+import com.editdining.service.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,7 @@ public class ServiceService {
     private final ServiceMasterRepository masterRepo;
     private final ServiceMediaRepository mediaRepo;
     private final ServicePriceRepository priceRepo;
+    private final ScrapRepository scrapRepo;
 
     private final ServiceMasterRepositorySupport masterRepoSupport;
 
@@ -88,6 +86,23 @@ public class ServiceService {
     public List<ServiceDto.Response> findByCategory(@Valid int category, Integer edit_type, String sort, int offset, int limit) {
         List<ServiceDto.Response> list = masterRepoSupport.findByCategory(category, edit_type, offset, limit);
         return list;
+    }
+
+    public CommonResult saveScrap(int member_id, ScrapEntity scrapEntity) {
+        scrapEntity.setMemberId(member_id);
+        int scrapId = scrapRepo.save(scrapEntity).getScrapId();
+        if(scrapId == 0) {
+            return responseService.getFailResult(100, "FAIL_DB_INSERT");
+        }
+        return responseService.getSuccessResult();
+    }
+
+    public CommonResult deleteScrap(int member_id, ScrapEntity scrapEntity) {
+        int delete = scrapRepo.deleteByMemberIdAndServiceId(member_id, scrapEntity.getServiceId());
+        if(delete == 0) {
+            return responseService.getFailResult(100, "FAIL_DB_DELETE");
+        }
+        return responseService.getSuccessResult();
     }
 
 }

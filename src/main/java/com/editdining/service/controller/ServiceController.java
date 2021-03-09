@@ -3,6 +3,7 @@ package com.editdining.service.controller;
 import com.editdining.response.CommonResult;
 import com.editdining.response.ResponseService;
 import com.editdining.service.dto.ServiceDto;
+import com.editdining.service.entity.ScrapEntity;
 import com.editdining.service.service.ServiceService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -32,9 +33,9 @@ public class ServiceController {
     }
 
     @ApiOperation(value = "2-2. 서비스 리스트")
-    @GetMapping(path = "/{category}")
+    @GetMapping(path = "")
     public CommonResult get(
-        @ApiParam(name = "1:영상편집 2:영상소스 3:캐리커처/일러스트 4:채널아트/채널아이콘 5:번역/자막 6:사운드/녹음", example = "1") @PathVariable(name="category", required = true) int category
+        @ApiParam(name = "1:영상편집 2:영상소스 3:캐리커처/일러스트 4:채널아트/채널아이콘 5:번역/자막 6:사운드/녹음", example = "1") @RequestParam(name="category", required = true) int category
         , @ApiParam(name = "1:일반편집 2:간단편집", example = "1") @RequestParam(value = "edit_type", required = false) Integer edit_type
         , @ApiParam(name = "개발중 popular recommend rate register", example = "register") @RequestParam(value = "sort", required = false) String sort
         , @ApiParam(name = "default : 0") @RequestParam(value = "offset", defaultValue = "0")int offset
@@ -42,6 +43,20 @@ public class ServiceController {
         List<ServiceDto.Response> list= service.findByCategory(category, edit_type, sort, offset, limit);
 
         return responseService.getListResult(list.size(), list);
+    }
+
+    @ApiOperation(value = "5-1. 스크랩")
+    @PostMapping(path = "scrap")
+    public CommonResult saveScrap(@RequestHeader(value="member_id") int member_id
+            ,  @ApiParam(name = "scrap 등록", required = true) @RequestBody ScrapEntity scrapEntity) {
+        return service.saveScrap(member_id, scrapEntity);
+    }
+
+    @ApiOperation(value = "5-1. 스크랩")
+    @DeleteMapping(path = "scrap")
+    public CommonResult deleteScrap(@RequestHeader(value="member_id") int member_id
+            ,  @ApiParam(name = "scrap 등록", required = true) @RequestBody ScrapEntity scrapEntity) {
+        return service.deleteScrap(member_id, scrapEntity);
     }
 
 
