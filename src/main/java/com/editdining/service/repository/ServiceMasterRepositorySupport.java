@@ -1,6 +1,7 @@
 package com.editdining.service.repository;
 
 import com.editdining.service.dto.ServiceDto;
+import com.editdining.service.entity.ScrapEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -14,6 +15,7 @@ import java.util.List;
 import static com.editdining.service.entity.QServiceMasterEntity.serviceMasterEntity;
 import static com.editdining.service.entity.QServicePriceEntity.servicePriceEntity;
 import static com.editdining.service.entity.QMemberEntity.memberEntity;
+import static com.editdining.service.entity.QScrapEntity.scrapEntity;
 
 
 @Repository
@@ -26,7 +28,8 @@ public class ServiceMasterRepositorySupport {
     * 2-2. 서비스 리스트
     * -> join이 필요해 querydsl로
     * */
-    public List<ServiceDto.Response> findByCategory(int category, Integer edit_type, int offset, int limit){
+    public List<ServiceDto.Response> findByCategory(int member_id, int category, Integer edit_type, int offset, int limit){
+
         return queryFactory
                 .select(Projections.fields(ServiceDto.Response.class,
                         serviceMasterEntity.service_id,
@@ -36,7 +39,8 @@ public class ServiceMasterRepositorySupport {
                         serviceMasterEntity.title,
                         serviceMasterEntity.description,
                         servicePriceEntity.price,
-                        memberEntity.name))
+                        memberEntity.name,
+                        scrapEntity.scrapId.as("is_scrap")))
                 .from(serviceMasterEntity)
                 // 가격
                 .join(servicePriceEntity)
@@ -47,8 +51,12 @@ public class ServiceMasterRepositorySupport {
                 // 회원
                 .join(memberEntity)
                     .on(memberEntity.member_id.eq(serviceMasterEntity.member_id))
-                .groupBy()
+                .leftJoin(scrapEntity)
+                    .on(scrapEntity.memberId.eq(serviceMasterEntity.member_id)
+                            .and(scrapEntity.serviceId.eq(serviceMasterEntity.service_id))
+                            .and(scrapEntity.memberId.eq(member_id)))
                 .where(serviceMasterEntity.category.eq(category), eqEditType(edit_type))
+                .groupBy(serviceMasterEntity.service_id)
                 .offset(offset)
                 .limit(limit)
                 .fetch();

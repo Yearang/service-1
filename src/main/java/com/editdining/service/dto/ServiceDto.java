@@ -106,7 +106,7 @@ public class ServiceDto implements Serializable {
 
         private double grade;
 
-        private boolean is_scrap;
+        private int is_scrap;
 
 
     }

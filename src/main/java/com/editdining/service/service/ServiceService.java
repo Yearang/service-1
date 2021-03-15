@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -83,8 +84,9 @@ public class ServiceService {
 
 
     /* 2-2. 서비스 리스트 */
-    public List<ServiceDto.Response> findByCategory(@Valid int category, Integer edit_type, String sort, int offset, int limit) {
-        List<ServiceDto.Response> list = masterRepoSupport.findByCategory(category, edit_type, offset, limit);
+    public List<ServiceDto.Response> findByCategory(int member_id, @Valid int category, Integer edit_type, String sort, int offset, int limit) {
+
+        List<ServiceDto.Response> list = masterRepoSupport.findByCategory(member_id, category, edit_type, offset, limit);
         return list;
     }
 
