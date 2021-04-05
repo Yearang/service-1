@@ -90,6 +90,12 @@ public class ServiceService {
         return list;
     }
 
+    public long findByCategoryTotal(int member_id, @Valid int category, Integer edit_type) {
+        long count = masterRepoSupport.findByCategoryTotal(member_id, category, edit_type);
+        return count;
+    }
+
+
     public CommonResult saveScrap(int member_id, ScrapEntity scrapEntity) {
         scrapEntity.setMemberId(member_id);
         int scrapId = scrapRepo.save(scrapEntity).getScrapId();

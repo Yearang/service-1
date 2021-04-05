@@ -51,7 +51,7 @@ public class ResponseService {
 		return result;
 	}
 
-	public <T> ListResult<T> getListResult(int size, List<T> list) {
+	public <T> ListResult<T> getListResult(long size, List<T> list) {
 		ListResult<T> result = new ListResult<>();
 		result.setTotal_count(size);
 		result.setList(list);

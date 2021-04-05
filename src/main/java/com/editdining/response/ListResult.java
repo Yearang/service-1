@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ListResult<T> extends CommonResult {
-    private int total_count;
+    private long total_count;
     private List<T> list;
 }

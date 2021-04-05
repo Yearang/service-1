@@ -70,4 +70,26 @@ public class ServiceMasterRepositorySupport {
         return serviceMasterEntity.edit_type.eq(edit_type);
     }
 
+    public long findByCategoryTotal(int member_id, int category, Integer edit_type){
+
+        return queryFactory
+                .selectFrom(serviceMasterEntity)
+                // 가격
+                .join(servicePriceEntity)
+                .on(servicePriceEntity.price_id
+                        .eq(JPAExpressions.select(servicePriceEntity.price_id.min())
+                                .from(servicePriceEntity)
+                                .where(serviceMasterEntity.service_id.eq(servicePriceEntity.service_id))))
+                // 회원
+                .join(memberEntity)
+                .on(memberEntity.member_id.eq(serviceMasterEntity.member_id))
+                .leftJoin(scrapEntity)
+                .on(scrapEntity.memberId.eq(serviceMasterEntity.member_id)
+                        .and(scrapEntity.serviceId.eq(serviceMasterEntity.service_id))
+                        .and(scrapEntity.memberId.eq(member_id)))
+                .where(serviceMasterEntity.category.eq(category), eqEditType(edit_type))
+                .groupBy(serviceMasterEntity.service_id)
+                .fetchCount();
+    }
+
 }

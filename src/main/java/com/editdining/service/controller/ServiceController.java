@@ -42,8 +42,8 @@ public class ServiceController {
         , @ApiParam(name = "default : 0") @RequestParam(value = "offset", defaultValue = "0")int offset
         , @ApiParam(name = "default : 12") @RequestParam(value = "limit", defaultValue = "12")int limit) {
         List<ServiceDto.Response> list = service.findByCategory(member_id, category, edit_type, sort, offset, limit);
-
-        return responseService.getListResult(list.size(), list);
+        long total_count = service.findByCategoryTotal(member_id, category, edit_type);
+        return responseService.getListResult(total_count, list);
     }
 
     @ApiOperation(value = "5-1. 스크랩")
