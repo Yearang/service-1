@@ -16,7 +16,7 @@ import static com.editdining.service.entity.QServiceMasterEntity.serviceMasterEn
 import static com.editdining.service.entity.QServicePriceEntity.servicePriceEntity;
 import static com.editdining.service.entity.QMemberEntity.memberEntity;
 import static com.editdining.service.entity.QScrapEntity.scrapEntity;
-
+import static com.editdining.service.entity.QPurchaseReviewEntity.purchaseReviewEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -40,7 +40,8 @@ public class ServiceMasterRepositorySupport {
                         serviceMasterEntity.description,
                         servicePriceEntity.price,
                         memberEntity.name,
-                        scrapEntity.scrapId.as("is_scrap")))
+                        scrapEntity.scrapId.as("is_scrap"),
+                        purchaseReviewEntity.rate.avg().as("rate")))
                 .from(serviceMasterEntity)
                 // 가격
                 .join(servicePriceEntity)
@@ -51,6 +52,9 @@ public class ServiceMasterRepositorySupport {
                 // 회원
                 .join(memberEntity)
                     .on(memberEntity.member_id.eq(serviceMasterEntity.member_id))
+                // 리뷰
+                .leftJoin(purchaseReviewEntity)
+                    .on(purchaseReviewEntity.serviceId.eq(serviceMasterEntity.service_id))
                 .leftJoin(scrapEntity)
                     .on(scrapEntity.memberId.eq(serviceMasterEntity.member_id)
                             .and(scrapEntity.serviceId.eq(serviceMasterEntity.service_id))

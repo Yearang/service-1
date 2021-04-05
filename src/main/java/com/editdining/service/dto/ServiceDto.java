@@ -103,11 +103,11 @@ public class ServiceDto implements Serializable {
 
         // member
         private String name;
-
         private double grade;
-
         private int is_scrap;
 
+        // review
+        private double rate;
 
     }
 
