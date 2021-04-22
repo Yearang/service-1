@@ -45,10 +45,10 @@ public class ServiceMasterRepositorySupport {
                 .from(serviceMasterEntity)
                 // 가격
                 .join(servicePriceEntity)
-                    .on(servicePriceEntity.price_id
-                            .eq(JPAExpressions.select(servicePriceEntity.price_id.min())
+                    .on(servicePriceEntity.priceId
+                            .eq(JPAExpressions.select(servicePriceEntity.priceId.min())
                                                 .from(servicePriceEntity)
-                                                .where(serviceMasterEntity.service_id.eq(servicePriceEntity.service_id))))
+                                                .where(serviceMasterEntity.service_id.eq(servicePriceEntity.serviceId))))
                 // 회원
                 .join(memberEntity)
                     .on(memberEntity.member_id.eq(serviceMasterEntity.member_id))
@@ -72,10 +72,10 @@ public class ServiceMasterRepositorySupport {
                 .selectFrom(serviceMasterEntity)
                 // 가격
                 .join(servicePriceEntity)
-                .on(servicePriceEntity.price_id
-                        .eq(JPAExpressions.select(servicePriceEntity.price_id.min())
+                .on(servicePriceEntity.priceId
+                        .eq(JPAExpressions.select(servicePriceEntity.priceId.min())
                                 .from(servicePriceEntity)
-                                .where(serviceMasterEntity.service_id.eq(servicePriceEntity.service_id))))
+                                .where(serviceMasterEntity.service_id.eq(servicePriceEntity.serviceId))))
                 // 회원
                 .join(memberEntity)
                 .on(memberEntity.member_id.eq(serviceMasterEntity.member_id))
