@@ -32,6 +32,8 @@ public class ServiceService {
     private final ServiceMediaRepository mediaRepo;
     private final ServicePriceRepository priceRepo;
     private final ScrapRepository scrapRepo;
+    private final PurchaseReviewRepository purchaseReviewRepo;
+    private final ServiceMediaRepository serviceMediaRepository;
 
     private final ServiceMasterRepositorySupport masterRepoSupport;
 
@@ -113,4 +115,13 @@ public class ServiceService {
         return responseService.getSuccessResult();
     }
 
+    public ServiceDto.DetailResponse getServiceDetail(int service_id, int member_id) {
+        ServiceDto.DetailResponse detail = masterRepoSupport.getServiceDetail(service_id, member_id);
+        List<ServicePriceEntity> priceList = priceRepo.findByServiceId(service_id);
+        detail.setPrice_list(priceList);
+        List<ServiceMediaEntity> mediaList = serviceMediaRepository.findByServiceId(service_id);
+        detail.setMediaList(mediaList);
+        return detail;
+        
+    }
 }

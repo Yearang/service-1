@@ -66,14 +66,6 @@ public class ServiceMasterRepositorySupport {
                 .fetch();
     }
 
-    // null 처리
-    private BooleanExpression eqEditType(Integer edit_type) {
-        if (edit_type == null) {
-            return null;
-        }
-        return serviceMasterEntity.edit_type.eq(edit_type);
-    }
-
     public long findByCategoryTotal(int member_id, int category, Integer edit_type){
 
         return queryFactory
@@ -94,6 +86,43 @@ public class ServiceMasterRepositorySupport {
                 .where(serviceMasterEntity.category.eq(category), eqEditType(edit_type))
                 .groupBy(serviceMasterEntity.service_id)
                 .fetchCount();
+    }
+
+    // null 처리
+    private BooleanExpression eqEditType(Integer edit_type) {
+        if (edit_type == null) {
+            return null;
+        }
+        return serviceMasterEntity.edit_type.eq(edit_type);
+    }
+
+    public ServiceDto.DetailResponse getServiceDetail(int service_id, int member_id) {
+        return queryFactory
+                .select(Projections.fields(ServiceDto.DetailResponse.class,
+                        serviceMasterEntity.service_id,
+                        serviceMasterEntity.category,
+                        serviceMasterEntity.title,
+                        serviceMasterEntity.edit_type,
+                        serviceMasterEntity.thumbnail,
+                        serviceMasterEntity.description,
+                        memberEntity.name,
+                        scrapEntity.scrapId.as("is_scrap"),
+                        purchaseReviewEntity.rate.avg().as("rate")))
+                .from(serviceMasterEntity)
+                // 회원
+                .join(memberEntity)
+                .on(memberEntity.member_id.eq(serviceMasterEntity.member_id))
+                // 리뷰
+                .leftJoin(purchaseReviewEntity)
+                .on(purchaseReviewEntity.serviceId.eq(serviceMasterEntity.service_id))
+                // 스크랩
+                .leftJoin(scrapEntity)
+                .on(scrapEntity.memberId.eq(serviceMasterEntity.member_id)
+                        .and(scrapEntity.serviceId.eq(serviceMasterEntity.service_id))
+                        .and(scrapEntity.memberId.eq(member_id)))
+                .where(serviceMasterEntity.service_id.eq(service_id))
+                .fetchOne();
+
     }
 
 }

@@ -1,6 +1,8 @@
 package com.editdining.service.dto;
 
 import com.editdining.service.entity.ServiceMasterEntity;
+import com.editdining.service.entity.ServiceMediaEntity;
+import com.editdining.service.entity.ServicePriceEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -108,6 +110,47 @@ public class ServiceDto implements Serializable {
 
         // review
         private double rate;
+
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @ToString
+    @ApiModel(description = "서비스 상세")
+    public static class DetailResponse {
+        // master
+        private int service_id;
+        @ApiModelProperty(name = "category", value = "1:영상편집 2:영상소스 3:캐리커처/일러스트 4:채널아트/채널아이콘 5:번역/자막 6:사운드/녹음", required = true, example = "1")
+        @NotNull
+        private int category;
+        @ApiModelProperty(name = "title", value = "제목", example = "제목 테스트", required = true)
+        @NotBlank
+        private String title;
+        @ApiModelProperty(name = "edit_type", value = "1:일반편집 2:간단편집", example = "1")
+        private int edit_type;
+        @ApiModelProperty(name = "thumbnail", value = "썸네일")
+        private String thumbnail;
+        @ApiModelProperty(name = "description", value = "설명", example = "서비스 설명")
+        private String description;
+
+        // price
+        private List<ServicePriceEntity> price_list;
+
+        // member
+        private String seller;
+        private String name;
+        private double grade;
+        private int is_scrap;
+
+        // review - 대표리뷰, 평균 평점
+        private String review;
+        private double rate;
+
+        // introduce media
+        @ApiModelProperty(name = "소개용 사진, 영상 정보")
+        List<ServiceMediaEntity> mediaList;
+
 
     }
 

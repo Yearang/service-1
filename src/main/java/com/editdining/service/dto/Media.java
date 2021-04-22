@@ -34,9 +34,9 @@ public class Media {
 
         public ServiceMediaEntity toEntity() {
             return ServiceMediaEntity.builder()
-                    .service_id(service_id)
+                    .serviceId(service_id)
                     .path(path)
-                    .original_name(original_name)
+                    .originalName(original_name)
                     .build();
         }
 

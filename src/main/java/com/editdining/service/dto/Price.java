@@ -38,7 +38,7 @@ public class Price {
                 .option1(option1)
                 .option2(option2)
                 .description(description)
-                .service_id(service_id)
+                .serviceId(service_id)
                 .build();
     }
 }

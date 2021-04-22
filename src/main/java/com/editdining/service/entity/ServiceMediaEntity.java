@@ -1,8 +1,6 @@
 package com.editdining.service.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,13 +8,15 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tbl_service_media")
 public class ServiceMediaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int media_id;
-    private int service_id;
+    private int mediaId;
+    private int serviceId;
     private String path;
-    private String original_name;
+    private String originalName;
     private String thumbnail;
 }
